@@ -8,6 +8,18 @@ and release it, `ctx.agentTeams` keeps a *flat immutable roster* — so both lis
 grow forever. This plugin adds the missing half: a model tool layer, a header
 panel in the web GUI, and an offline CLI.
 
+## Requirements
+
+- DeepSeek Harness `>= 0.2.1-rc.1 < 0.3.0-0` (the session-log layout and the
+  `agentTeams` / `subagents` services this plugin drives are from that line).
+- A profile that mounts the team/subagent bundles — the stock `desktop` and
+  `web` profiles do; headless profiles without `agentTeams` simply get no
+  teammate rows.
+- Node `^22.15 || >=24` (the offline CLI uses `node:zlib` zstd support).
+
+Paths in this document are examples from a Windows install; nothing in the
+plugin is path-specific (it resolves `DSH_HOME`, then `~/.dsh`).
+
 ## Where it lives
 
 | what | path |
