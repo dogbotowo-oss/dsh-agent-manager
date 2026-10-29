@@ -1,0 +1,5 @@
+# dsh-agent-manager bundle layer: mount the subagent/teammate manager plugin.
+- insert:
+    - id: agent-manager
+      name: 'dsh-agent-manager'
+      config: {}
