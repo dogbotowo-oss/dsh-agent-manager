@@ -1,4 +1,4 @@
-# dsh-agent-manager
+﻿# dsh-agent-manager
 
 Stop **and really remove** subagents and Agent Teams teammates in DeepSeek Harness.
 | 子代理 / 团队成员的管理插件：停止运行实例，并从「子代理目录」和「团队花名册」里真正移除。
@@ -41,9 +41,14 @@ subagent (label, parent, depth, running state), each with two actions:
 
 - **停止** — interrupt the running turn and release the resident instance
   (frees an `maxActiveSubagents` slot). Nothing is deleted.
-- **移除** — two clicks (the button becomes **确认移除**): stop, retire the
-  catalog/roster record in the parent session log, and move the child's session
-  directory to the trash.
+- **移除** — two clicks. The row first asks **确认移除**, and then offers two
+  disposals: **进回收站** (stop, retire the catalog/roster record in the parent
+  session log, move the child's session directory to the plugin trash — the file
+  can be moved back) or **彻底删除** (the same, but the directory is deleted
+  outright — no trash copy, no undo).
+
+The panel footer shows the trash (`N 项 · size`) with a two-click **清空回收站**,
+and the footer line reports where the trash and the log backups live.
 
 Closing the panel: click the backdrop, press Esc, or click the header button again.
 
@@ -53,7 +58,7 @@ Closing the panel: click the backdrop, press Esc, or click the header button aga
 | --- | --- |
 | `agent_list` | List this conversation's subagents and teammates with session ids and running state. |
 | `agent_stop` | Cancel the running turn and release the resident instance. Nothing is deleted. |
-| `agent_remove` | Stop → retire the catalog/roster records in this session's own log → move the child's session directory to the plugin's trash. `keep_files: true` leaves the files; `dry_run: true` only reports. |
+| `agent_remove` | Stop → retire the catalog/roster records in this session's own log → move the child's session directory to the plugin's trash. `purge: true` deletes the directory instead of trashing it (no undo); `keep_files: true` leaves the files; `dry_run: true` only reports. |
 
 Typical use in a conversation:
 
@@ -87,7 +92,7 @@ Two more guards: the original file is copied to
 aborted if the file's size/mtime changes between read and rename (the host
 appends per batch, so this only trips while the session is actually writing),
 and the child's directory goes to `$DSH_HOME/agent-manager/trash/<timestamp>/`
-rather than being deleted.
+rather than being deleted — unless you pick **彻底删除** / `purge: true`, which skips the trash on purpose.
 
 ## Offline CLI
 
@@ -101,6 +106,9 @@ node lib/cli.js sessions
 node lib/cli.js list   --session session-7cdeef91-9e50-4487-90d1-bc9c0a4ae4a4
 node lib/cli.js remove --session session-7cdeef91-9e50-4487-90d1-bc9c0a4ae4a4 --target dft-runner
 node lib/cli.js remove --session <id> --target <id> --keep-files --dry-run
+node lib/cli.js remove --session <id> --target <id> --purge   # delete, no trash
+node lib/cli.js trash                                         # list the recycle bin
+node lib/cli.js trash --empty                                 # wipe it for good
 ```
 
 ## Install / rebuild
@@ -127,6 +135,9 @@ node 'E:\DeepSeek Harness 0.2.1\resources\runtime\primary-runtime\dependencies\p
 
 ## Limits
 
+- `--purge` / `purge: true` is destructive: the conversation itself is gone;
+  the parent log backup under `agent-manager/backups/` is the only trace left.
+
 - Retiring the roster does **not** rewrite `team/task` history: tasks that named
   the removed member keep its id in the log (they render as unknown assignees).
 - The child's conversation itself is untouched — it is moved, not shredded; put
@@ -136,3 +147,4 @@ node 'E:\DeepSeek Harness 0.2.1\resources\runtime\primary-runtime\dependencies\p
 - A removed teammate's *name* stays taken for the lifetime of the log (the
   provisioning record is what reserves it); spawn a new name instead.
 - Only the flat roster is supported (there is no nested team to reconcile).
+

@@ -1,7 +1,7 @@
 {
     "name":  "dsh-agent-manager",
-    "version":  "0.1.1",
-    "description":  "Stop and really remove subagents and Agent Teams teammates: retire their catalog/roster records in the parent session log (seq-preserving tombstones) and move their session directories to a recoverable trash. | 子代理/团队成员管理：停止运行实例、从子代理目录与团队花名册中真正移除，会话文件进可恢复回收站。",
+    "version":  "0.1.2",
+    "description":  "Stop and really remove subagents and Agent Teams teammates: retire their catalog/roster records in the parent session log (seq-preserving tombstones) and move their session directories to a recoverable trash — or delete them outright with purge. | 子代理/团队成员管理：停止运行实例、从子代理目录与团队花名册中真正移除，会话文件进可恢复回收站，也可选彻底删除。",
     "keywords":  [
                      "dsh",
                      "dsh-plugin",
