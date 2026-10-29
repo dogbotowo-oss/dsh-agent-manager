@@ -1,4 +1,4 @@
-﻿# dsh-agent-manager
+# dsh-agent-manager
 
 Stop **and really remove** subagents and Agent Teams teammates in DeepSeek Harness.
 | 子代理 / 团队成员的管理插件：停止运行实例，并从「子代理目录」和「团队花名册」里真正移除。
@@ -49,6 +49,12 @@ subagent (label, parent, depth, running state), each with two actions:
 
 The panel footer shows the trash (`N 项 · size`) with a two-click **清空回收站**,
 and the footer line reports where the trash and the log backups live.
+
+The panel title carries a small `vX.Y.Z` badge read from the **running** copy of
+the plugin (`/agent-manager/api/list` → `result.version`). After installing a new
+build, this badge is the quickest way to tell whether the app really reloaded it:
+an old badge means the host is still running the previous module, so quit the app
+from the tray and start it again (closing the window only hides it).
 
 Closing the panel: click the backdrop, press Esc, or click the header button again.
 
